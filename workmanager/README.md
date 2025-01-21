@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+### about login api...
 
-## Getting Started
+# in login api we call the end point 
+> for post request api/login
+> in ui we go to route app/login
 
-First, run the development server:
+## in post request we need to pass email and password as body...
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Backend
+> first we destructure {email and password} from  request.json(), 
+> second we check is the email exist in the db if yes we then we compate the provided pass with db hased pass if it is correct then follow next step
+> in third step we create our jwt tokent through jwt.sign() by passing required parameters, store in variable and log it and check weather we got the token or no
+> in fourth step we need to send the token as response either header or cookie 
+we choose cookie for sending token as response to client.
+   * we use response.cookie.set() to send token through client read the documention of nextResponse() from next .js
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## In UI
+> we pass the email and password fields and click on login button form will be submited and handleLogin will get exectued
+  * first loading of page is prevented
+  * second we use basic validation 
+  * at last we do post request
+            * first configureing the axios instance and exporting as axiosInstance
+            * secon in helper folder we call the 
+               axiosInstance.post("api/login"/,state)
+               .then((res)=>{res})
+            * in ui page we just call the fun and pass the state variables
+......................................................................................
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Middleware in the Project....
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+> before executing the request, the middleware code is executed first
+> so first it checks if the user is on the path signin || login through
+  request.nextUrl.pathname>>> you need to go through nextResponse > nextUrl >url
+  it will provide either true or false
+> check weather the user is logged in or not it can be checked throug if the token 
+  is  visible or not
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+* we need to specify matcher to which it shall be implemeted...
+  
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

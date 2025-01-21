@@ -32,10 +32,10 @@ export async function POST(request) {
     
     // response 
     const response = NextResponse.json({
-      status: 201,
-      user,
+      status: true,
       message: "User created successfully",
-    });
+      user,
+    },{status:200});
     return response;
 
     //catch block
@@ -45,7 +45,7 @@ export async function POST(request) {
     if(error.errorResponse.code===11000){
       return NextResponse.json({
         status:false,
-        message:"email already existed"
+        message:"email already existed",
       },{status:500})
     }
     return NextResponse.json({
@@ -58,11 +58,18 @@ export async function POST(request) {
 
 export async function GET(request) {
   let users = [];
-  users = await userModel.find().select("-password");
-  return NextResponse.json({
-    succes: true,
-    failure: false,
-    message: "succesfully runed get request",
-    list: users,
-  });
+  try{
+    users = await userModel.find().select("-password");
+    return NextResponse.json({
+      status:true,
+      message: "Fetched all users successfully",
+      list: users,
+    },{status:201});
+  }catch(error){
+    return NextResponse.json({
+      status:false,
+      message: "failed in fetching all users",
+      error
+    },{status:400});
+  }
 }

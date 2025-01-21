@@ -1,25 +1,58 @@
 "use client";
 
+import { loginfn } from "@/services/loginService";
+import { redirect } from "next/dist/server/api-utils";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
-function LoginComp() {
-    
-  const handleLogin = (e) => {
+  function LoginComp() {
+  const router = useRouter()
+  // onSubmit from form
+  const handleLogin =async (e) => {
+    // preventiing refrsh
     e.preventDefault();
+
+    // basic validation 
+    if(!loginData.email || !loginData.password){
+      return toast.warning("fill out the required fields")
+    }
+
+      // http post method
+
+   try {
+    const result = await loginfn(loginData)
+    console.log(result)
+   toast.success("Login Successfull")
+   router.push("/profile/user"); 
+      setLoginData({
+    email:"",
+    password:""
+   })
+   } catch (error) {
+      console.log(error.response.data.message);
+      toast.error(`login unsuccessfull ${error.response.data.message || ""}`)
+   }
+
   };
 
-  const [login, setLogin] = useState({
+  
+  // setting up the states
+  const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   });
 
+  // double binding with input field and state variable
   const handleChange = (e) => {
-    setLogin({
-      ...login,
+    setLoginData({
+      ...loginData,
       [e.target.name]: e.target.value,
     });
   };
+
+
   return (
     <div className="grid grid-cols-12">
       <div className="col-span-4 col-start-5">
@@ -39,7 +72,7 @@ function LoginComp() {
             <input
               id="email"
               name="email"
-              value={login.email}
+              value={loginData.email}
               placeholder="Enter here"
               onChange={(e) => {
                 handleChange(e);
@@ -59,7 +92,7 @@ function LoginComp() {
             <input
               id="password"
               name="password"
-              value={login.password}
+              value={loginData.password}
               placeholder="Enter here"
               onChange={(e) => {
                 handleChange(e);

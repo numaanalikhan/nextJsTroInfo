@@ -4,28 +4,30 @@ import { userModel } from "@/models/users";
 import { NextResponse } from "next/server";
 connectDb();
 
-// export async function GET(request, { params }) {
-//   try {
-//     let { userId } = params;
-//     let user = await userModel.findById(userId);
-//     return NextResponse.json({
-//       user,
-//       success: true,
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     return NextResponse.json({
-//       message: "user not found",
-//     });
-//   }
-// }
+export async function GET(request, { params }) {
+  try {
+    let { userId } = params;
+    let user = await userModel.findById(userId);
+    return NextResponse.json({
+      success: true,
+      message:"fetched user successfully",
+      user,
+    },{status:201});
+  } catch (error) {
+    return NextResponse.json({
+      success: false,
+      message: "user not found",
+      error
+    },{status:400});
+  }
+}
 
 export async function PUT(request, { params }) {
   try {
     let { userId } = params;
     let { name, email, password, about, profileUrl } = await request.json();
 
-    await userModel.findByIdAndUpdate(userId, {
+   const user = await userModel.findByIdAndUpdate(userId, {
       name,
       email,
       password,
@@ -33,9 +35,17 @@ export async function PUT(request, { params }) {
       profileUrl,
     });
 
+    if(!user){
+      return NextResponse.json({
+        success: false,
+        message: "User is not found",
+        error
+      },{status:500});
+    }
+
     return NextResponse.json({
       success: true,
-      message: "updated successfulyy",
+      message: " User updated successfulyy",
       name,
       email,
       password,
@@ -43,27 +53,38 @@ export async function PUT(request, { params }) {
       profileUrl,
     });
   } catch (error) {
-    console.log(error);
+    return NextResponse.json({
+      success: false,
+      message: "User is not updated",
+      error
+    },{status:500});
   }
 }
 
 export async function DELETE(request, { params }) {
-  let { userId } = params;
   try {
-    await userModel.deleteOne({
-      _id: userId,
-    });
+    let { userId } = await params;
+    const user = await userModel.findOneAndDelete({_id:userId})
+   
+    if(!user){
+      return NextResponse.json({
+        success: false,
+        message: "User is not found",
+      },{status:500});
+    }
+
     const response = NextResponse.json({
-      message: "user is deleted successfully",
       success: true,
-    });
+      message: "user is deleted successfully",
+      user
+    },{status:200});
     return response;
   } catch (error) {
-    console.log(error);
     return NextResponse.json({
-      message: "delete is not done",
       success: false,
-    });
+      message: "User is not deleted",
+      error
+    },{status:500});
   }
 }
 
