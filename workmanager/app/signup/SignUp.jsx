@@ -3,9 +3,10 @@ import { signUp } from "@/services/taskService";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 function SignUpComp() {
-    
+   const router = useRouter()    
    const [signup,setSignup] = useState({
         name:"",
         email:"",
@@ -42,6 +43,7 @@ function SignUpComp() {
             about:"",
             profileUrl:"something"
         })
+        router.push("/login")
         }catch(error){
             console.log(error);
             toast.error("User not Addd",{

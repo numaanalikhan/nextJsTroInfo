@@ -3,6 +3,7 @@ import "./globals.css";
 import CustumNavbar from "@/components/CustumNavbar";
 import Footer from "@/components/Footer";
 import { ToastContainer, toast } from 'react-toastify';
+import UserProvider from "@/contextApi/userProvider";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -24,10 +25,12 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ToastContainer/>
+       <UserProvider>
+       <ToastContainer/>
         <CustumNavbar/>
         <div className="mt-2 ">{children}</div>
         <Footer/>
+       </UserProvider>
       </body>
     </html>
   );

@@ -1,43 +1,45 @@
 "use client";
 
+import { UserContext } from "@/contextApi/userContext";
 import { loginfn } from "@/services/loginService";
 import { redirect } from "next/dist/server/api-utils";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-  function LoginComp() {
-  const router = useRouter()
+function LoginComp() {
+  const router = useRouter();
+ const {user,setUser } = useContext(UserContext)
   // onSubmit from form
-  const handleLogin =async (e) => {
+  const handleLogin = async (e) => {
     // preventiing refrsh
     e.preventDefault();
 
-    // basic validation 
-    if(!loginData.email || !loginData.password){
-      return toast.warning("fill out the required fields")
+    // basic validation
+    if (!loginData.email || !loginData.password) {
+      return toast.warning("fill out the required fields");
     }
 
-      // http post method
+    // http post method
 
-   try {
-    const result = await loginfn(loginData)
-    console.log(result)
-   toast.success("Login Successfull")
-   router.push("/profile/user"); 
+    try {
+      const result = await loginfn(loginData);
+      console.log(result);
+      
+      setUser({...result})
+      toast.success("Login Successfull", { position: "top-center" });
+      router.push("/profile/user");
       setLoginData({
-    email:"",
-    password:""
-   })
-   } catch (error) {
+        email: "",
+        password: "",
+      });
+    } catch (error) {
       console.log(error.response.data.message);
-      toast.error(`login unsuccessfull ${error.response.data.message || ""}`)
-   }
-
+      toast.error(`login unsuccessfull ${error.response.data.message || ""}`);
+    }
   };
 
-  
   // setting up the states
   const [loginData, setLoginData] = useState({
     email: "",
@@ -51,7 +53,6 @@ import { toast } from "react-toastify";
       [e.target.name]: e.target.value,
     });
   };
-
 
   return (
     <div className="grid grid-cols-12">

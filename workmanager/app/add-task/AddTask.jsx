@@ -1,16 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Image from "next/image";
 import { addTask } from "@/services/taskService";
 import {  toast } from 'react-toastify';
+import { UserContext } from "@/contextApi/userContext";
 
 function AddTask() {
+  const {user:{_id}} = useContext(UserContext)
   const [taskData, setTaskData] = useState({
     title: "",
     content: "",
     status: "none",
-    userId: "6788e0074b45b6db4323da7b",// for temporay period only
+    userId: _id,// for temporay period only
   });
   const handleChange= (e)=>{
     setTaskData({...taskData,[e.target.name]:e.target.value})

@@ -44,6 +44,7 @@ export async function POST(request) {
     const response = NextResponse.json({
       message:"Login Succesffluy and sent cookie",
       success:true,
+      user
     },{
       status: 201,
     })

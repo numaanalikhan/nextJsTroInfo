@@ -8,18 +8,20 @@ export async function GET(request,{params}){
     try{
         let {taskId} = params;
 
-    let task = await taskModel.findById(taskId);
+    let task = await taskModel.findOne({taskId});
 
     return NextResponse.json({
         success:true,
         message:"Got single user",
+        task,
         name:task.title
     })
     }catch(error){
       console.log(error);
       return NextResponse.json({
           success:false,
-          message: "task cant be fetched"
+          message: "task cant be fetched",
+          error
       })
       
     }
