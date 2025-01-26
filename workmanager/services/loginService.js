@@ -1,5 +1,19 @@
 const { axiosInstance } = require("@/helpers/createInstance");
 
+// impor axiosInstance fro
+
+//show users tasks
+
+export async function getUserTasks(userId){
+
+   const result = await axiosInstance.get(`/api/users/${userId}/tasks`)
+    .then((res)=>{
+      return res?.data?.tasks
+    })
+    
+    return result
+}
+
 export async function loginfn(state) {
   const result = await axiosInstance.post("/api/login", state).then((res) => {
     console.log(res?.data?.user);
@@ -11,13 +25,36 @@ export async function loginfn(state) {
 }
 
 export async function getCurrentUserApi() {
-  const result = await axiosInstance.get("/api/current").then((res) => {
-    console.log("here is the data"+ JSON.stringify(res?.data?.user))
-    console.log("here is the data"+ JSON.stringify(res?.data))
+  let data = null
+  try {
+    
+    const result = await axiosInstance.get("/api/current")
 
-   return res?.data?.user;
-  });
-  return result
+    if(result?.data?.user !== undefined){
+      data= result?.data?.user
+    }
+    else{
+      return data=undefined;
+    }
+  } catch (error) {
+    console.log("error: ", error)
+
+  }
+
+  // .then((res) => {
+  //   console.log("here is the data"+ JSON.stringify(res?.data))
+    // the below commented lines were written to solve the login and logout problem
+
+  //   if(res?.data?.user == undefined){
+  //     return null
+  //   }
+  //   else{
+  //     return res?.data?.user;
+  //   }
+  // }).catch((error)=>{
+  //   console.log("error: ", error)
+  // })
+  return data
 }
 
 
@@ -31,6 +68,9 @@ export async function logout(){
 
 
 
+
+
+// these are used when we deal only with frontend
 // export async function getCurrentUserApi() {
 //   try {
 //     const result = await axiosInstance.get("/api/current");

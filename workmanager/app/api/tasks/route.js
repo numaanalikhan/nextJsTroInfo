@@ -22,8 +22,9 @@ export async function POST(request){
     }catch(error){
         console.log(error);
         return NextResponse.json({
-            message:"No Task Added UNSuccessfully",
+            message:"task not added",
             success:false,
+            error
             
         })        
     }

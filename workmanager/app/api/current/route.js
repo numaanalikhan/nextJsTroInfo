@@ -1,6 +1,9 @@
 import { userModel } from "@/models/users";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import connectDb from "@/helpers/db";
+
+connectDb()
 
 export async function GET(request){
     // first we need to get the token, in the token we have our user data

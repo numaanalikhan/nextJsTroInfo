@@ -25,7 +25,19 @@ export function middleware(request) {
     }
   } else {
     if (!authToken) {
+      
+      if(request.nextUrl.pathname.startsWith("/api")){
+        return NextResponse.json({
+          message:"not authenticated",
+          success:false
+        },{
+          status:401
+        })
+      }
+       
       return NextResponse.redirect(new URL("/login", request.url));
+
+
     }
   }
 

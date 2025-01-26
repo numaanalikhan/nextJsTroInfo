@@ -1,7 +1,7 @@
-"use client"
-import { createContext } from "react"
+// "use client"
+// import { createContext } from "react"
 
-// syntax for create context
-export const UserContext = createContext(undefined)
+// // syntax for create context
+// export const UserContext = createContext(undefined)
 
 

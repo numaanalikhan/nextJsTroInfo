@@ -1,6 +1,6 @@
-"use client";
 
-import { UserContext } from "@/contextApi/userContext";
+
+import { userContext } from "@/contextApi/userProvider";
 import { loginfn } from "@/services/loginService";
 import { redirect } from "next/dist/server/api-utils";
 import { useRouter } from "next/navigation";
@@ -9,25 +9,33 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 function LoginComp() {
+
+  //1 states
   const router = useRouter();
- const {user,setUser } = useContext(UserContext)
-  // onSubmit from form
+  const { user, setUser } = userContext();
+  // setting up the states
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
+  //2 onSubmit from form
   const handleLogin = async (e) => {
-    // preventiing refrsh
+    //2.1 preventiing refrsh
     e.preventDefault();
 
-    // basic validation
+    //2.2 basic validation
     if (!loginData.email || !loginData.password) {
       return toast.warning("fill out the required fields");
     }
 
-    // http post method
+    //2.3 http post method
 
     try {
       const result = await loginfn(loginData);
       console.log(result);
-      
-      setUser({...result})
+
+      setUser({ ...result });
       toast.success("Login Successfull", { position: "top-center" });
       router.push("/profile/user");
       setLoginData({
@@ -39,12 +47,6 @@ function LoginComp() {
       toast.error(`login unsuccessfull ${error.response.data.message || ""}`);
     }
   };
-
-  // setting up the states
-  const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
-  });
 
   // double binding with input field and state variable
   const handleChange = (e) => {

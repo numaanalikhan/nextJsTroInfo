@@ -57,3 +57,21 @@ why we returned if request.nextUrl.pathname === /api/login ,
 because if it is included the matcher of middleware,
 then middleware will rediret to /login route,
 which cannot able to do logoin and genereate token if not generated
+
+......................................................................................
+
+
+### The Following are list of end points 
+
+# BASIC
+1) for sign up: /api/users : POST REQ
+2) for login  : /api/users/[user] : POST REQ
+   after login , a anoter API GET REQ  is made to the server, in order to fetch the "Current User" that has logged In.
+   for currentUser : /api/current/ : GET REQ
+    When user current user is logged in, then the current user details are fetched, 
+3) for logout : /api/logout : POST REQ, here it removes the cookie
+
+# LOGGED IN
+1) ADD-TASK: /api/tasks : POST REQ and Data is stored in db
+2) SHOW-TASKS: /api/users/[user]/task : GET REQ
+3) DELETE-TASK: /api/tasks/[task]: DELETE REQ

@@ -4,15 +4,18 @@ import React, { useContext, useState } from "react";
 import Image from "next/image";
 import { addTask } from "@/services/taskService";
 import {  toast } from 'react-toastify';
-import { UserContext } from "@/contextApi/userContext";
+import { userContext } from "@/contextApi/userProvider";
 
 function AddTask() {
-  const {user:{_id}} = useContext(UserContext)
+  const {user} = userContext() 
+    console.log(user?._id)
+  if(!user) return null
+  
   const [taskData, setTaskData] = useState({
     title: "",
     content: "",
     status: "none",
-    userId: _id,// for temporay period only
+    userId: user._id// for temporay period only
   });
   const handleChange= (e)=>{
     setTaskData({...taskData,[e.target.name]:e.target.value})
@@ -22,21 +25,28 @@ function AddTask() {
     console.log(taskData);
    
     //validation taskData in future
-
+    if(!taskData.content || !taskData.title || taskData.status==="none"){
+      return toast.warning("please fill the required fields")
+    }
     try{
         const result = await  addTask(taskData)
+
         console.log(result);
+        
         toast.success("Task Added Successfully" ,{
           position:"top-center"
         })
-        {
+        
           setTaskData(
           {
-            title:"",
+            ...taskData, title:"",
             content:"",
             status:"none",
-            }
-          )}
+            userId:user?._id
+            
+          }
+           
+          )
     }catch(error){
       console.log(error);
       toast.error("Task not Added!!!",{
