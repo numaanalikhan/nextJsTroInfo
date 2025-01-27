@@ -7,7 +7,6 @@ async function Lecture({params}) {
     <>
     <div className='text-center text-4xl font-bold mt-20'> {resolved?.lecture[0]}</div>
     <div className='text-center text-4xl font-bold mt-20'> {resolved?.lecture[1]}</div>
-
     </>
   )
 }

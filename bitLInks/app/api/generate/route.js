@@ -4,15 +4,23 @@ export async function POST(request) {
   let body = await request.json();
   console.log(body);
 
+  // connection mongodb, creating db called bitlinks, and creating collection called url
   let client = await clientPromise;
   let db = client.db("bitLinks");
   let collection = db.collection("url");
+
+  // validation for the two input elements full url and shorten
   if (body.url === "" || body.shorten === "") {
     alert("something is missy");
   }
+
+  // calling the shorten url collection
+  // 
   let docs = await collection.findOne({ shorten: body.shorten });
   console.log(docs);
 
+
+  // checking does the shorent word is already existed or not
   if (docs) {
     return Response.json({
       success: false,
